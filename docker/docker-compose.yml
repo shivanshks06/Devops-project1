@@ -1,0 +1,62 @@
+
+services:
+  auth-service:
+    build: ../app/auth-service
+    container_name: auth-service
+    ports:
+      - "5001:5001"
+    networks:
+      - devops-network
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=devuser
+      - DB_PASS=devpass
+      - DB_NAME=devdb
+
+  api-service:
+    build: ../app/api-service
+    container_name: api-service
+    ports:
+      - "5002:5002"
+    networks:
+      - devops-network
+    depends_on:
+      - auth-service
+    
+
+  frontend:
+    image: nginx:latest
+    container_name: frontend
+    ports:
+      - "8080:80"   
+    volumes:
+     - ../app/frontend:/usr/share/nginx/html
+     - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - devops-network
+    depends_on:
+      - api-service
+      - auth-service
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    ports:
+      - "5432:5432"
+    networks:
+      - devops-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  devops-network:
+
+volumes:
+  postgres-data: 
+    

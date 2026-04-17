@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevOps Project</title>
+</head>
+<body>
+    <h1>🚀 DevOps Mega Project</h1>
+
+    <h2>Signup</h2>
+    <input id="su_user" placeholder="Username">
+    <input id="su_pass" placeholder="Password" type="password">
+    <button onclick="signup()">Signup</button>
+
+    <h2>Login</h2>
+    <input id="li_user" placeholder="Username">
+    <input id="li_pass" placeholder="Password" type="password">
+    <button onclick="login()">Login</button>
+
+    <p id="output"></p>
+
+    <script>
+        async function signup() {
+            let res = await fetch('/auth/signup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('su_user').value,
+                    password: document.getElementById('su_pass').value
+                })
+            });
+            let data = await res.json();
+            document.getElementById('output').innerText = data.message;
+        }
+
+        async function login() {
+            let res = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('li_user').value,
+                    password: document.getElementById('li_pass').value
+                })
+            });
+            let data = await res.json();
+            document.getElementById('output').innerText = data.message;
+        }
+    </script>
+</body>
+</html>
