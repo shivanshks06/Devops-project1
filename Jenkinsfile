@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_COMPOSE = "docker-compose"
+        DOCKER_COMPOSE = "docker compose"
     }
 
     stages {
@@ -15,14 +15,14 @@ pipeline {
 
         stage('Build Containers') {
             steps {
-                sh 'cd docker && docker-compose build'
+                sh 'cd docker && docker compose build'
             }
         }
 
         stage('Run Containers') {
             steps {
-                sh 'cd docker && docker-compose down || true'
-                sh 'cd docker && docker-compose up -d'
+                sh 'cd docker && docker compose down || true'
+                sh 'cd docker && docker compose up -d'
             }
         }
 
